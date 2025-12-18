@@ -6,7 +6,7 @@ if (!is_logged_in()) {
     redirect('head.php');
 }
 
-$user_id = $_SESSION['user']['user_id'];
+$user_id = $_SESSION['user']['user_id'] ?? $_SESSION['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
