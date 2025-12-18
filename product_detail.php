@@ -1,13 +1,14 @@
 <?php
-include '_base.php'; // 1. Use the Master Base File
-require_once 'database.php'; // 2. Use the Master Database Connection
-// Get Product ID
+include '_base.php'; 
+require_once 'database.php'; 
+
+// 1. Get Product ID
 if (!isset($_GET['id'])) {
     die("No product selected.");
 }
 $id = intval($_GET['id']);
 
-// 2. Use $_db (Standard Connection)
+// 2. Fetch Product
 $stmt = $_db->prepare("SELECT * FROM product WHERE id = ?");
 $stmt->execute([$id]);
 $product = $stmt->fetch();
@@ -16,16 +17,28 @@ if (!$product) {
     die("Product not found.");
 }
 
-// Calculate Display Stock (Real Stock - Cart Qty)
+// 3. Dynamic Display Logic (Member vs Guest)
+if (is_logged_in()) {
+    // User is a Member
+    $header_file = 'heade.php';       // Member Header
+    $back_url    = 'member.php';      // Back to Member Menu
+} else {
+    // User is a Guest
+    $header_file = 'header.php';      // Guest/Main Header
+    $back_url    = 'mainpage_menu.php'; // Back to Public Menu
+}
+
+// 4. Calculate Stock
 $cartQty = $_SESSION['cart'][$id]['qty'] ?? 0;
 $displayStock = $product['stock'] - $cartQty;
 
-// Handle Add to Cart
-if (is_post()) { // 3. Use is_post() helper
+// 5. Handle Add to Cart
+if (is_post()) { 
     
-    // Security: Ensure user is logged in before adding
+    // Security: Force login if they try to POST data
     if (!is_logged_in()) {
-        redirect('head.php');
+        temp('info', 'Please login to add items to cart');
+        redirect('head.php'); 
         exit;
     }
 
@@ -35,11 +48,9 @@ if (is_post()) { // 3. Use is_post() helper
 
     // Validate Stock
     if ($product['stock'] <= 0) {
-        // 4. Fix Redirect URL (Removed "product_detail(3).php")
         redirect("product_detail.php?id=$id&error=out_of_stock");
     }
 
-    // Validate Total Request
     $totalRequired = $cartQty + $qty;
     if ($totalRequired > $product['stock']) {
         $remaining = $product['stock'] - $cartQty;
@@ -69,13 +80,10 @@ if (is_post()) { // 3. Use is_post() helper
         body {
             background: #f5f5f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
         }
         .stock-info { 
-            color: #666; 
-            margin: 10px 0; 
-            font-size: 1.1em;
+            color: #666; margin: 10px 0; font-size: 1.1em;
         }
         .stock-number { 
             font-weight: bold; 
@@ -103,77 +111,51 @@ if (is_post()) { // 3. Use is_post() helper
             text-align: center;
         }
         .product-image {
-            width: 300px;
-            max-width: 100%;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            width: 300px; max-width: 100%;
+            border-radius: 12px; margin-bottom: 20px;
         }
         .price {
-            font-size: 1.6em;
-            color: #388e3c;
-            margin: 10px 0 20px;
+            font-size: 1.6em; color: #388e3c; margin: 10px 0 20px;
         }
         .description {
-            font-size: 1em;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            text-align: left;
+            font-size: 1em; color: #555; line-height: 1.6;
+            margin-bottom: 30px; text-align: left;
         }
         .order-form {
-            margin-top: 20px;
-            text-align: left;
+            margin-top: 20px; text-align: left;
         }
         .form-group { margin-bottom: 20px; }
         label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #444;
+            display: block; font-weight: bold; margin-bottom: 8px; color: #444;
         }
         input[type="number"], select {
-            width: 100%;
-            padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; font-size: 1em;
+            border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;
         }
         #cartButt {
-            width: 100%;
-            padding: 12px;
-            background-color: #388e3c;
-            color: #fff;
-            font-size: 1.1em;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            width: 100%; padding: 12px;
+            background-color: #388e3c; color: #fff;
+            font-size: 1.1em; font-weight: bold;
+            border: none; border-radius: 8px; cursor: pointer;
             transition: background-color 0.3s ease;
         }
         #cartButt:hover { background-color: #2e7031; }
         .alert.error {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #f44336;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
+            max-width: 800px; margin: 20px auto;
+            background: #f44336; color: #fff;
+            padding: 15px; border-radius: 8px; text-align: center;
         }
         .out-of-stock {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: red;
+            margin-top: 20px; font-size: 1.2em; color: red;
         }
     </style>
 </head>
 <body>
 
-<?php include 'header.php'; ?>
+<?php include $header_file; ?>
 
 <div class="linkButton">
-    <br><a href="mainpage_menu.php" id="link">← Back to Product List</a>
+    <br><a href="<?= $back_url ?>" id="link">← Back to Product List</a>
 </div>
 
 <?php if (isset($_GET['added'])): ?>
