@@ -88,18 +88,19 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         .product {
             border: 1px solid #ccc;
-            padding: 15px;
             margin: 10px;
-            width: 220px;
             text-align: center;
             border-radius: 8px;
             background: white;
+            padding: 15px;
+            width:200px;
+            height:min-content;
         }
         .product img {
-            width: 100%;
+            width: 200px;
             height: 180px;
-            object-fit: cover;
             border-radius: 6px;
+            margin-bottom: 10px;
         }
     </style>
 </head>

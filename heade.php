@@ -69,7 +69,7 @@
         </a> 
         
         <a href="profileMember.php">
-            <img src="view.php?image=<?= encode($user->photo) ?>" 
+            <img src="view.php?image=<?= encode($user['photo']) ?>" 
                  alt="Profile" 
                  class="photo-preview-small">
         </a>
