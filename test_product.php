@@ -1,5 +1,5 @@
 <?php
-include 'database.php';
+include '_base.php';
 
 // Handle stock update (individual product)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id']) && isset($_POST['add_qty'])) {
