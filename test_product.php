@@ -28,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_all']) && isse
 }
 
 // --- LOGIC: Fetch products ---
-$stm = $_db->prepare('SELECT * FROM product');
-$stm->execute();
+$stm = $_db->query('SELECT * FROM product');
 $stock = $stm->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
