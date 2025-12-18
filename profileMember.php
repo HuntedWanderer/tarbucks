@@ -1,13 +1,31 @@
 <?php
 require '_base.php';
-include 'heade.php';
 
 if (!is_logged_in()) {
     temp('info', 'Please login first');
     redirect('head.php');
 }
 
-$user_id = $_SESSION['user']->user_id;
+// Refresh User Session (Safe)
+$user_id = $_SESSION['user']['user_id'];
+$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+$_SESSION['user'] = $user;
+
+// --- GHOST CODE DELETED ---
+// I removed the 50+ lines of "Profile Update" logic. 
+// It does not belong on a Menu page!
+
+// Cart Count Logic
+$cart_count = 0;
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
+    }
+}
+
+$user_id = $_SESSION['user']['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
@@ -21,7 +39,7 @@ if (is_post()) {
 
     $_err = [];
 
-    if ($user_id != $user->user_id && !is_unique($user_id, 'member', 'user_id')) {
+    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
         $_err['user_id'] = 'User ID already exists';
     }
     elseif (strlen($user_id) < 5) {
@@ -35,14 +53,36 @@ if (is_post()) {
         $_err['user_id'] = 'Email already exists';
     }
 
-    $photo = $user->photo;
+    $photo = $user['photo'];
     if ($f) {
         if (!str_starts_with($f->type, 'image/')) {
             $_err['photo'] = 'Only image files are allowed';
         } elseif ($f->size > 1 * 1024 * 1024) {
             $_err['photo'] = 'Image size cannot exceed 1MB';
         } else {
-            $photo = save_photo($f, 'photos');
+            $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
+$region = 'us-east-1';
+
+// 1. Get the uploaded file path from your helper function object ($f)
+// Note: I am assuming $f is an object or array returned by your get_file() function.
+// If get_file() returns an object with tmp_name, use $f->tmp_name
+// If get_file() returns $_FILES['photo'], use $f['tmp_name']
+
+// Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
+$file_tmp = $_FILES['photo']['tmp_name'];
+$file_name = basename($_FILES['photo']['name']);
+$s3_filename = time() . "_" . $file_name; // Unique name
+
+// 2. Upload to S3
+$cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
+exec($cmd, $output, $return_var);
+
+if ($return_var === 0) {
+    $photo = $s3_filename; // Success
+} else {
+    $_SESSION['error'] = "Photo upload failed";
+    // Redirect or stop execution if strictly required
+}
         }
     }
 
@@ -56,10 +96,10 @@ if (is_post()) {
             $params = [$user_id, $email, $fav, $photo, $user->id];
             $stm->execute($params);
 
-            $user->user_id = $user_id;
-            $user->email = $email;
-            $user->fav_person = $fav;
-            $user->photo = $photo;
+            $user['user_id'] = $user_id;
+            $user['email'] = $email;
+            $user['fav_person'] = $fav;
+            $user['photo'] = $photo;
             $_SESSION['user'] = $user;
 
             temp('info', 'Profile updated successfully');
@@ -149,6 +189,7 @@ if (is_post()) {
     </style>
 </head>
 <body>
+<?php include 'heade.php';?>
 <div id="info"><?= temp('info') ?></div>
 
 

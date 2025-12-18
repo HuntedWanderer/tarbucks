@@ -26,11 +26,11 @@ try {
     $stmt->execute([$id]);
     
     // --- START S3 DELETION ---
-    if ($member && !empty($member->photo)) {
-        $bucket = 'YOUR_BUCKET_NAME_HERE'; // <--- UPDATE THIS
+    if ($member && !empty($member['photo'])) {
+        $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
         
         // Construct the path (assuming your DB holds "photo.jpg" and S3 has "images/photo.jpg")
-        $s3Path = "s3://{$bucket}/images/{$member->photo}";
+        $s3Path = "s3://{$bucket}/images/{$member['photo']}";
         
         // Run the AWS CLI remove command
         // 2>&1 redirects errors to output so we can debug if needed, but usually not required for delete
