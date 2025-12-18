@@ -47,7 +47,7 @@ $stmt = $_db->prepare("
     GROUP BY o.id
     ORDER BY o.created_at DESC
 ");
-$stmt->execute([$user->user_id, $user->user_id]);
+$stmt->execute([$user['user_id'], $user['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
