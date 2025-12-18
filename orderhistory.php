@@ -8,23 +8,17 @@ if (!is_logged_in()) {
     redirect('login.php');
 }
 
-$session_user = $_SESSION['user'];
-// Check if it's an object (->) or array ([]) to avoid crashes
-$current_id = is_object($session_user) ? $session_user->user_id : $session_user['user_id'];
-
-// 3. Refresh User Data (Force Object for consistency)
+// Refresh User Session (Safe)
+$user_id = $_SESSION['user']['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
-$stmt->execute([$current_id]);
-$user = $stmt->fetch(PDO::FETCH_OBJ); // <--- Key Fix: Fetch as Object
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
 
-// Update Session
-if ($user) {
-    $_SESSION['user'] = $user;
-} else {
-    logout(); // User no longer exists in DB
-}
+// --- GHOST CODE DELETED ---
+// I removed the 50+ lines of "Profile Update" logic. 
+// It does not belong on a Menu page!
 
-// 4. Cart Logic
+// Cart Count Logic
 $cart_count = 0;
 if (!empty($_SESSION['cart'])) {
     foreach ($_SESSION['cart'] as $qty) {
@@ -32,8 +26,10 @@ if (!empty($_SESSION['cart'])) {
     }
 }
 
-// 5. Query Orders
-// We use the ID for BOTH parameters as you requested.
+// 获取当前用户信息
+$user = $_SESSION['user'];
+
+// 查询订单
 $stmt = $_db->prepare("
     SELECT 
         o.id,
@@ -45,17 +41,12 @@ $stmt = $_db->prepare("
     FROM orders o
     LEFT JOIN order_item oi ON o.id = oi.order_id
     WHERE 
-        o.member_user_id = ? 
-        OR (o.users_name = ? AND o.member_user_id IS NULL)
+        o.member_user_id = ? OR 
+        (o.users_name = ? AND o.member_user_id IS NULL)
     GROUP BY o.id
     ORDER BY o.created_at DESC
 ");
-
-// EXECUTE: Pass the ID twice.
-// 1st ID: Checks member_user_id column
-// 2nd ID: Checks users_name column
-$stmt->execute([$user->user_id, $user->user_id]); 
-
+$stmt->execute([$user['user_id'], $user['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
