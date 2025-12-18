@@ -2,11 +2,29 @@
 // orderhistory.php
 
 include '_base.php';
-include 'heade.php';
 
 // 验证登录
 if (!is_logged_in()) {
     redirect('login.php');
+}
+
+// Refresh User Session (Safe)
+$user_id = $_SESSION['user']['user_id'];
+$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+$_SESSION['user'] = $user;
+
+// --- GHOST CODE DELETED ---
+// I removed the 50+ lines of "Profile Update" logic. 
+// It does not belong on a Menu page!
+
+// Cart Count Logic
+$cart_count = 0;
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
+    }
 }
 
 // 获取当前用户信息
@@ -124,7 +142,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-
+<?php include 'heade.php'; ?>
 
 <h1>🧾 Your Order History</h1>
 
