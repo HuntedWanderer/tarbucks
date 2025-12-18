@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             (member_user_id, payment_method, created_at) 
             VALUES (?, ?, NOW())");
         $stmt->execute([
-            $_SESSION['user']->user_id,
+            $_SESSION['user']['user_id'],
             $payment_method
         ]);
         $order_id = $pdo->lastInsertId();
