@@ -29,11 +29,19 @@ if (is_logged_in()) {
     }
 }
 
-    // C. Set Member Navigation
-    $header_file = 'heade.php';       
-    $back_url    = 'member.php';      
+if ($isAdmin) {
+        // ADMIN SETTINGS
+        // Make sure this filename matches your actual admin header file!
+        $header_file = 'main_page.php'; 
+        // Admins usually go back to the Admin Dashboard/Home (try.php)
+        $back_url    = 'try.php';          
+    } else {
+        // B. Set Member Navigation
+        $header_file = 'heade.php';       
+        $back_url    = 'member.php';      
+    }
 } else {
-    // D. Set Guest Navigation
+    // C. Set Guest Navigation
     $header_file = 'header.php';      
     $back_url    = 'mainpage_menu.php'; 
 }

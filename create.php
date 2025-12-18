@@ -4,7 +4,7 @@
 include '_base.php'; 
 
 // 2. Security: Ensure only Admin can access
-if (!is_logged_in() || $_SESSION['user']->role !== 'Admin') {
+if (!is_logged_in() || $_SESSION['user']['role'] !== 'Admin') {
     die("Access Denied. Admins only.");
 }
 
