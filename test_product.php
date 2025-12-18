@@ -1,6 +1,6 @@
 <?php
 // Note: We do NOT include '_base.php' here because the parent page already loaded it.
-
+global $_db;
 // --- LOGIC: Handle stock update (individual product) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id']) && isset($_POST['add_qty'])) {
     $product_id = (int)$_POST['product_id'];
