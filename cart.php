@@ -1,7 +1,26 @@
 <?php
 
-include 'db.php';
+include '_base.php';
 include 'heade.php';
+
+// Refresh User Session (Safe)
+$user_id = $_SESSION['user']['user_id'];
+$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+$_SESSION['user'] = $user;
+
+// --- GHOST CODE DELETED ---
+// I removed the 50+ lines of "Profile Update" logic. 
+// It does not belong on a Menu page!
+
+// Cart Count Logic
+$cart_count = 0;
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
+    }
+}
 
 //  商品删除
 if (isset($_GET['remove'])) {
