@@ -1,6 +1,6 @@
 <?php
 include '_base.php'; // 1. Use the Master Base File
-
+require_once 'database.php'; // 2. Use the Master Database Connection
 // Get Product ID
 if (!isset($_GET['id'])) {
     die("No product selected.");
@@ -191,7 +191,7 @@ if (is_post()) { // 3. Use is_post() helper
 <?php endif; ?>
 
 <div class="product-detail">
-    <img src="view.php?f=<?= htmlspecialchars($product['photo']) ?>" 
+    <img src="view.php?image=<?= htmlspecialchars($product['photo']) ?>" 
          alt="<?= htmlspecialchars($product['name']) ?>" 
          class="product-image">
 
