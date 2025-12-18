@@ -1,10 +1,10 @@
 <?php
 include '_base.php';
 
-// if (!is_logged_in()) {
-//     temp('info', 'Please login first');
-//     redirect('head.php');
-// }
+if (!is_logged_in()) {
+    temp('info', 'Please login first');
+    redirect('head.php');
+}
 
 $user_id = $_SESSION['user']->user_id;
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
@@ -100,7 +100,7 @@ if (is_post()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARBUCK</title>
-    <link rel="icon" href="/images/logo.webp">
+    <link rel="icon" href="logo.webp">
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="zz.css">
     <script src="/js/script.js"></script>
@@ -163,10 +163,10 @@ if (is_post()) {
     
 
     <div class="profile-header">
-    <?php if ($user->photo): ?>
+    <?php if ($user['photo']): ?>
        
         <a href="profile.php">
-            <img src="view.php?image=<?= encode($user->photo) ?>" 
+            <img src="view.php?image=<?= encode($user['photo']) ?>" 
                  alt="Profile Photo"
                  class="photo-preview">
         </a>
@@ -174,7 +174,7 @@ if (is_post()) {
 </div>
 
 <header class="header">
-<img class="logo" src="/images/logo.webp" alt="Tarbuck Coffee Logo">
+<img class="logo" src="logo.webp" alt="Tarbuck Coffee Logo">
 <div class="main-head-content">
     
     <a href="try.php" class="title-link">
@@ -192,7 +192,7 @@ if (is_post()) {
     <a href="member_list.php" id="order">
         <span>MEMBER</span>
     </a>
-    <a href="/" id="logout">
+    <a href="logout.php" id="logout">
         <span>LOGOUT</span>
     </a>
 </div>

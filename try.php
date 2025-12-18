@@ -1,7 +1,7 @@
 <?php
 ob_start();
 require 'main_page.php';
-
+auth('Admin');
 
 $title = 'TARBUCK';
 include 'basic_searching.php';

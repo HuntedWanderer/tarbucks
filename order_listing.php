@@ -137,20 +137,20 @@ $orders = $stmt->fetchAll();
                     <?php else: ?>
                         <?php foreach ($orders as $order): ?>
                             <tr>
-                                <td>#TAR<?= str_pad($order->id, 5, '0', STR_PAD_LEFT) ?></td>
+                                <td>#TAR<?= str_pad($order['id'], 5, '0', STR_PAD_LEFT) ?></td>
                                 
-                                <td><?= htmlspecialchars($order->member_user_id ?? 'Guest') ?></td>
+                                <td><?= htmlspecialchars($order['member_user_id'] ?? 'Guest') ?></td>
                                 
-                                <td><?= ucfirst($order->payment_method) ?></td>
+                                <td><?= ucfirst($order['payment_method']) ?></td>
                                 
-                                <td><?= date('Y-m-d H:i', strtotime($order->created_at)) ?></td>
+                                <td><?= date('Y-m-d H:i', strtotime($order['created_at'])) ?></td>
                                 
                                 <td>
                                     <div class="action-group">
-                                        <a class="btn view-btn" href="receipt.php?order_id=<?= $order->id ?>" target="_blank">View</a>
+                                        <a class="btn view-btn" href="receipt.php?order_id=<?= $order['id'] ?>" target="_blank">View</a>
                                         
                                         <form method="post" onsubmit="return confirm('Are you sure? This will permanently delete this order and its items.');">
-                                            <input type="hidden" name="id" value="<?= $order->id ?>">
+                                            <input type="hidden" name="id" value="<?= $order['id'] ?>">
                                             <button type="submit" name="delete" class="btn delete-btn">Delete</button>
                                         </form>
                                     </div>
