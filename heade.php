@@ -34,7 +34,7 @@ if (is_post()) {
         $_err['user_id'] = 'Email already exists';
     }
 
-    $photo = $user->photo;
+    $photo = $user['photo'];
     if ($f) {
         if (!str_starts_with($f->type, 'image/')) {
             $_err['photo'] = 'Only image files are allowed';
@@ -42,11 +42,11 @@ if (is_post()) {
             $_err['photo'] = 'Image size cannot exceed 1MB';
         } else {
             // --- START S3 UPDATE ---
-            $bucket = 'YOUR_BUCKET_NAME_HERE'; // <--- UPDATE THIS
+            $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
             
             // 1. Delete the OLD photo from S3 (Clean up)
-            if (!empty($user->photo)) {
-                 $oldS3Path = "s3://{$bucket}/images/" . $user->photo;
+            if (!empty($user['photo'])) {
+                 $oldS3Path = "s3://{$bucket}/images/" . $user['photo'];
                  exec("aws s3 rm \"{$oldS3Path}\" --region us-east-1 > /dev/null 2>&1");
             }
 
@@ -78,10 +78,10 @@ if (is_post()) {
             $params = [$user_id, $email, $fav, $photo, $user->id];
             $stm->execute($params);
 
-            $user->user_id = $user_id;
-            $user->email = $email;
-            $user->fav_person = $fav;
-            $user->photo = $photo;
+            $user['user_id'] = $user_id;
+            $user['email'] = $email;
+            $user['fav_person'] = $fav;
+            $user['photo'] = $photo;
             $_SESSION['user'] = $user;
 
             temp('info', 'Profile updated successfully');
