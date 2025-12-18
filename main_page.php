@@ -6,7 +6,7 @@ if (!is_logged_in()) {
     redirect('head.php');
 }
 
-$user_id = $_SESSION['user']->user_id;
+$user_id = $_SESSION['user']['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
@@ -20,7 +20,7 @@ if (is_post()) {
 
     $_err = [];
 
-    if ($user_id != $user->user_id && !is_unique($user_id, 'member', 'user_id')) {
+    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
         $_err['user_id'] = 'User ID already exists';
     }
     elseif (strlen($user_id) < 5) {
@@ -30,11 +30,11 @@ if (is_post()) {
     if (!is_email($email)) {
         $_err['email'] = 'Invalid email format';
     }
-    if ($email != $user->email && !is_unique($email, 'member', 'email')) {
+    if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
         $_err['user_id'] = 'Email already exists';
     }
 
-    $photo = $user->photo;
+    $photo = $user['photo'];
     if ($f) {
         if (!str_starts_with($f->type, 'image/')) {
             $_err['photo'] = 'Only image files are allowed';
@@ -45,8 +45,8 @@ if (is_post()) {
             $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS!
             
             // 1. Delete OLD photo from S3 (optional, keeps bucket clean)
-            if (!empty($user->photo)) {
-                 $oldS3Path = "s3://{$bucket}/images/" . $user->photo;
+            if (!empty($user['photo'])) {
+                 $oldS3Path = "s3://{$bucket}/images/" . $user['photo'];
                  exec("aws s3 rm \"{$oldS3Path}\" --region us-east-1 > /dev/null 2>&1");
             }
 
@@ -78,10 +78,10 @@ if (is_post()) {
             $params = [$user_id, $email, $fav, $photo, $user->id];
             $stm->execute($params);
 
-            $user->user_id = $user_id;
-            $user->email = $email;
-            $user->fav_person = $fav;
-            $user->photo = $photo;
+            $user['user_id'] = $user_id;
+            $user['email'] = $email;
+            $user['fav_person'] = $fav;
+            $user['photo'] = $photo;
             $_SESSION['user'] = $user;
 
             temp('info', 'Profile updated successfully');
