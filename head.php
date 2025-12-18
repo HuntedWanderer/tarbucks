@@ -36,7 +36,7 @@ if (is_post()) {
 
             if (password_verify($password, $user['password'])) {
                 // 登录成功时重置
-                $_SESSION['user_id'] = $user->user_id; 
+                $_SESSION['user_id'] = $user['user_id']; 
                 $_db->prepare('UPDATE member 
                                SET failed_attempts = 0, 
                                    locked_until = NULL 
