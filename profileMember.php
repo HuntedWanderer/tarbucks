@@ -186,7 +186,7 @@ if ($return_var === 0) {
     display: flex;
     align-items: center;
 }
-button.submitBtn{
+button.submit-btn{
     background-color: #6f4e37;
     color: white;
     border: none;
