@@ -1,5 +1,4 @@
 <?php
-include '_base.php';
 
 // Safe: $_db comes from database.php
 $stm = $_db->query('SELECT * FROM product');
