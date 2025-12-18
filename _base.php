@@ -202,7 +202,15 @@ function login($user, $url = '/') {
 
 // Logout user
 function logout($url = '/') {
-    unset($_SESSION['user']);
+    // 1. Clear all session variables
+    $_SESSION = []; 
+
+    // 2. Destroy the session file on the server
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_destroy();
+    }
+
+    // 3. Redirect
     redirect($url);
 }
 
