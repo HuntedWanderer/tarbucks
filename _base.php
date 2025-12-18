@@ -241,7 +241,9 @@ function auth(...$roles) {
     global $_user;
     if ($_user) {
         if ($roles) {
-            if (in_array($_user->role, $roles)) {
+            $role = is_object($_user) ? $_user->role : $_user['role'];
+
+            if (in_array($role, $roles)) {
                 return; // OK
             }
         }
