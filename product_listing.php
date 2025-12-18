@@ -12,7 +12,7 @@ $products = $stm->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Listing</title>
-    <link rel="icon" href="/images/logo.webp">
+    <link rel="icon" href="logo.webp">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
