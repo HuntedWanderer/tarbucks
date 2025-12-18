@@ -26,15 +26,15 @@ if (is_post()) {
 
         if ($user) {
             // 检查锁定
-            if ($user->is_locked) {
-                $unlock_time = date("H:i", strtotime($user->locked_until));
+            if ($user['is_locked']) {
+                $unlock_time = date("H:i", strtotime($user['locked_until']));
                 temp('info', "Account locked. Please try again after $unlock_time");
                 redirect('head.php');
                 exit;
             }
 
-            
-            if (password_verify($password, $user->password)) {
+
+            if (password_verify($password, $user['password'])) {
                 // 登录成功时重置
                 $_SESSION['user_id'] = $user->user_id; 
                 $_db->prepare('UPDATE member 
@@ -49,7 +49,7 @@ if (is_post()) {
                 exit;
             } else {
                 // 密码错误
-                $new_attempts = $user->failed_attempts + 1;
+                $new_attempts = $user['failed_attempts'] + 1;
                 $remaining = 5 - $new_attempts;
 
                 $update_data = [
