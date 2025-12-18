@@ -20,7 +20,7 @@ if (is_post()) {
 
     $_err = [];
 
-    if ($user_id != $user->user_id && !is_unique($user_id, 'member', 'user_id')) {
+    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
         $_err['user_id'] = 'User ID already exists';
     }
     elseif (strlen($user_id) < 5) {
@@ -30,8 +30,8 @@ if (is_post()) {
     if (!is_email($email)) {
         $_err['email'] = 'Invalid email format';
     }
-    if ($email != $user->email && !is_unique($email, 'member', 'email')) {
-        $_err['user_id'] = 'Email already exists';
+    if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
+        $_err['email'] = 'Email already exists';
     }
 
     $photo = $user['photo'];
@@ -100,16 +100,6 @@ if (!empty($_SESSION['cart'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TARBUCK</title>
-    <link rel="icon" href="/images/logo.webp">
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="zz.css">
-    <script src="/js/script.js"></script>
     <style>
         .profile-header {
             position: absolute;
@@ -180,22 +170,17 @@ if (!empty($_SESSION['cart'])) {
 
         }
     </style>
-</head>
-<body>
-    <div id="info"><?= temp('info') ?></div>
     
-
+<header class="header">
+<div id="info"><?= temp('info') ?></div>
     <div class="profile-header">
-  
     <a href="profileMember.php">
-    <img src="view.php?image=<?= encode($user->photo) ?>" 
+    <img src="view.php?image=<?= encode($user['photo']) ?>" 
          alt="Profile Photo" 
          class="photo-preview">
 </a>
 </div>
-
-<header class="header">
-<img class="logo" src="/images/logo.webp" alt="Tarbuck Coffee Logo">
+<img class="logo" src="logo.webp" alt="Tarbuck Coffee Logo">
 <div class="main-head-content">
     
     <a href="member.php" class="title-link">
@@ -218,9 +203,4 @@ if (!empty($_SESSION['cart'])) {
     </a>   
 
 </div>
-
- 
-
-    </header>
-</body>
-</html>
+</header>
