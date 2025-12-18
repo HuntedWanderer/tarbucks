@@ -26,6 +26,7 @@ if (is_post()) { // 3. Use is_post() helper
     // Security: Ensure user is logged in before adding
     if (!is_logged_in()) {
         redirect('head.php');
+        exit;
     }
 
     $qty = intval(post('quantity') ?? 1);
@@ -172,7 +173,7 @@ if (is_post()) { // 3. Use is_post() helper
 <?php include 'header.php'; ?>
 
 <div class="linkButton">
-    <br><a href="product_listing.php" id="link">← Back to Product List</a>
+    <br><a href="mainpage_menu.php" id="link">← Back to Product List</a>
 </div>
 
 <?php if (isset($_GET['added'])): ?>

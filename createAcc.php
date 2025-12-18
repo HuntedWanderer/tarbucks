@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (strlen($user_id) < 5) {
         $_SESSION['error'] = "Username must be at least 5 characters!";
     }
-    elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/', $password)) {
+    elseif (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/', $password)) {
         $_SESSION['error'] = "Password must contain at least 8 characters with uppercase, lowercase and numbers!";
     } elseif ($password !== $confirm_password) {
         $_SESSION['error'] = "Passwords do not match!";

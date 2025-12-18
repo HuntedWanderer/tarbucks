@@ -27,7 +27,7 @@ $products = $stm->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($products as $product): ?>
             <div class="image-box">
                 <a href="product_detail.php?id=<?= htmlspecialchars($product['id']) ?>">
-                    <img class="product" src="view.php?f=<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+                    <img class="product" src="view.php?image=<?= htmlspecialchars($product['photo']) ?>" alt="<?= htmlspecialchars($product['name']) ?>">
                 </a>
                 <div class="description"><?= htmlspecialchars($product['name']) ?></div>
                 <input type="checkbox" name="id" value="<?= htmlspecialchars($product['id']) ?>" class="delete-checkbox">
