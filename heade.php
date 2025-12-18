@@ -60,7 +60,7 @@
         </a>
         <a href="member.php">PRODUCT</a>
         <a href="orderhistory.php">ORDER HISTORY</a>
-        <a href="head.php">LOGOUT</a>
+        <a href="logout.php">LOGOUT</a>
     </nav>
 
     <div class="header-right">
