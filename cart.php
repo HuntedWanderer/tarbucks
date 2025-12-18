@@ -87,13 +87,14 @@ if (!empty($_SESSION['cart'])) {
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f4f4;
+            margin:0px 10px 20px 10px;
             
         }
 
    
 
         table {
-            width: 100%;
+            width: 98%;
             border-collapse: collapse;
             background-color: #fff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
@@ -105,11 +106,13 @@ if (!empty($_SESSION['cart'])) {
             background-color: #388e3c;
             color: white;
             padding: 12px;
+            text-align:center;
         }
 
         td {
             padding: 12px;
             vertical-align: middle;
+            text-align: center;
         }
 
         tr:nth-child(even) {
@@ -189,8 +192,9 @@ if (!empty($_SESSION['cart'])) {
                 ?>
                 <tr>
                     <td><?= htmlspecialchars($item['name']) ?></td>
-                    <td><img src="view.php?image=<?php echo $row['image']; ?>" width="80"></td>
+                    <td><img src="view.php?image=<?php echo $item['photo']; ?>" width="80"></td>
                     <td>
+                        <label>Quantity:</label>
                         <input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $qty ?>" min="0"><br>
 
                         <label>Ice:</label>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php';
+include '_base.php';
 
 // 检查订单ID参数
 if (!isset($_GET['order_id'])) {

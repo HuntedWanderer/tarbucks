@@ -1,6 +1,23 @@
 <?php
-include 'db.php';
-include 'heade.php';
+include '_base.php';
+// Refresh User Session (Safe)
+$user_id = $_SESSION['user']['user_id'];
+$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+$_SESSION['user'] = $user;
+
+// --- GHOST CODE DELETED ---
+// I removed the 50+ lines of "Profile Update" logic. 
+// It does not belong on a Menu page!
+
+// Cart Count Logic
+$cart_count = 0;
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $payment_method = $_POST['payment_method'];
@@ -152,10 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </style>
 </head>
 <body>
-
+<?php include 'heade.php';?>
 
 <h1 class ="">Checkout</h1>
-
 <form method="post">
     <label>Payment Method:</label>
     <select name="payment_method" required>
