@@ -186,6 +186,14 @@ if ($return_var === 0) {
     display: flex;
     align-items: center;
 }
+button.submitBtn{
+    background-color: #6f4e37;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -239,7 +247,7 @@ if ($return_var === 0) {
 
             <button type="submit" class="submit-btn">Save Changes</button>
             <div class="login-links" style="justify-content: center;top: 100px;">
-            <a href="forgot_passwordMember.php">Forgot Password?</a>
+
         </div>
      
         </form>
