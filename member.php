@@ -2,7 +2,6 @@
 // 1. Include Standard Files
 require 'database.php'; 
 include '_base.php';
-include 'heade.php'; 
 
 // 2. Security Check
 auth('Member'); 
@@ -106,6 +105,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
+<?php include 'heade.php'; ?>
 <div id="info"><?= temp('info') ?></div>
 
 <div class="category-nav">
