@@ -6,7 +6,7 @@ if (!is_logged_in()) {
     redirect('head.php');
 }
 
-$user_id = $_SESSION['user']->user_id;
+$user_id = $_SESSION['user']['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
@@ -20,7 +20,7 @@ if (is_post()) {
 
     $_err = [];
 
-    if ($user_id != $user->user_id && !is_unique($user_id, 'member', 'user_id')) {
+    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
         $_err['user_id'] = 'User ID already exists';
     }
     elseif (strlen($user_id) < 5) {
@@ -30,18 +30,40 @@ if (is_post()) {
     if (!is_email($email)) {
         $_err['email'] = 'Invalid email format';
     }
-    if ($email != $user->email && !is_unique($email, 'member', 'email')) {
+    if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
         $_err['user_id'] = 'Email already exists';
     }
 
-    $photo = $user->photo;
+    $photo = $user['photo'];
     if ($f) {
         if (!str_starts_with($f->type, 'image/')) {
             $_err['photo'] = 'Only image files are allowed';
         } elseif ($f->size > 1 * 1024 * 1024) {
             $_err['photo'] = 'Image size cannot exceed 1MB';
         } else {
-            $photo = save_photo($f, 'photos');
+            $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
+$region = 'us-east-1';
+
+// 1. Get the uploaded file path from your helper function object ($f)
+// Note: I am assuming $f is an object or array returned by your get_file() function.
+// If get_file() returns an object with tmp_name, use $f->tmp_name
+// If get_file() returns $_FILES['photo'], use $f['tmp_name']
+
+// Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
+$file_tmp = $_FILES['photo']['tmp_name'];
+$file_name = basename($_FILES['photo']['name']);
+$s3_filename = time() . "_" . $file_name; // Unique name
+
+// 2. Upload to S3
+$cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
+exec($cmd, $output, $return_var);
+
+if ($return_var === 0) {
+    $photo = $s3_filename; // Success
+} else {
+    $_SESSION['error'] = "Photo upload failed";
+    // Redirect or stop execution if strictly required
+}
         }
     }
 
@@ -52,13 +74,13 @@ if (is_post()) {
                 SET user_id = ?, email = ?, fav_person = ?, photo = ?
                 WHERE id = ?
             ");
-            $params = [$user_id, $email, $fav, $photo, $user->id];
+            $params = [$user_id, $email, $fav, $photo, $user['id']];
             $stm->execute($params);
 
-            $user->user_id = $user_id;
-            $user->email = $email;
-            $user->fav_person = $fav;
-            $user->photo = $photo;
+            $user['user_id'] = $user_id;
+            $user['email'] = $email;
+            $user['fav_person'] = $fav;
+            $user['photo'] = $photo;
             $_SESSION['user'] = $user;
 
             temp('info', 'Profile updated successfully');
@@ -151,10 +173,10 @@ if (is_post()) {
 
 
 <div class="profile-header">
-    <?php if ($user->photo): ?>
+    <?php if ($user['photo']): ?>
        
         <a href="profile.php">
-        <img src="view.php?image=<?= encode($user->photo) ?>" 
+        <img src="view.php?image=<?= encode($user['photo']) ?>" 
                  alt="Profile Photo" 
                  class="photo-preview">
         </a>
@@ -162,7 +184,7 @@ if (is_post()) {
 </div>
 
 <header class="header">
-<img class="logo" src="/images/logo.webp" alt="Tarbuck Coffee Logo">
+<img class="logo" src="logo.webp" alt="Tarbuck Coffee Logo">
 <div class="main-head-content">
     
     <a href="try.php" class="title-link">
@@ -189,7 +211,7 @@ if (is_post()) {
             <div class="form-group" id='form-group input'>
                 <label>User ID</label>
                 <input type="text" name="user_id" 
-                       value="<?= encode($user->user_id) ?>" 
+                       value="<?= encode($user['user_id']) ?>" 
                        required>
                 <?php err('user_id'); ?>
             </div>
@@ -197,7 +219,7 @@ if (is_post()) {
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" name="email" 
-                       value="<?= encode($user->email) ?>" 
+                       value="<?= encode($user['email']) ?>" 
                        required>
                 <?php err('email'); ?>
             </div>
@@ -205,14 +227,14 @@ if (is_post()) {
             <div class="form-group">
                 <label>Favorite Person</label>
                 <input type="text" name="fav_person" 
-                       value="<?= encode($user->fav_person) ?>">
+                       value="<?= encode($user['fav_person']) ?>">
             </div>
 
             <div class="form-group">
                 <label>Profile Photo</label>
                 <div class="photo-upload-area" onclick="document.getElementById('photo-input').click()">
-                    <?php if ($user->photo): ?>
-                        <img src="<?= encode($user->photo) ?>" 
+                    <?php if ($user['photo']): ?>
+                        <img src="<?= encode($user['photo']) ?>" 
                              class="photo-preview"
                              id="preview-image">
                     <?php else: ?>

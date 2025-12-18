@@ -75,7 +75,7 @@ if (is_post()) {
                 SET user_id = ?, email = ?, fav_person = ?, photo = ?
                 WHERE id = ?
             ");
-            $params = [$user_id, $email, $fav, $photo, $user->id];
+            $params = [$user_id, $email, $fav, $photo, $user['id']];
             $stm->execute($params);
 
             $user['user_id'] = $user_id;
