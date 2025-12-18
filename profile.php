@@ -154,7 +154,7 @@ if (is_post()) {
     <?php if ($user->photo): ?>
        
         <a href="profile.php">
-        <img src="view.php?f=<?= encode($user->photo) ?>" 
+        <img src="view.php?image=<?= encode($user->photo) ?>" 
                  alt="Profile Photo" 
                  class="photo-preview">
         </a>

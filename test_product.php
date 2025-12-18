@@ -155,7 +155,7 @@ $stock = $stm->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($stock as $s): ?>
             <tr <?php if ($s['stock'] < 5) echo 'style="background-color: #ffcccc;"'; ?>>
                 <td><?= htmlspecialchars($s['name']) ?></td>
-                <td><img src="view.php?f=<?= htmlspecialchars($s['photo']) ?>" class="product"></td>
+                <td><img src="view.php?image=<?= htmlspecialchars($s['photo']) ?>" class="product"></td>
                 <td>
                     <?= htmlspecialchars($s['stock']) ?>
                     <?php if ($s['stock'] < 5): ?>

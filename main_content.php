@@ -18,7 +18,7 @@ $products = $stm->fetchAll(PDO::FETCH_ASSOC);
             <div class="product-box">
                 <a href="product_detail.php?id=<?= htmlspecialchars($product['id']) ?>">
                     
-                    <img src="view.php?f=<?= htmlspecialchars($product['photo']) ?>" 
+                    <img src="view.php?image=<?= htmlspecialchars($product['photo']) ?>" 
                          alt="<?= htmlspecialchars($product['name']) ?>">
                 </a>
                 

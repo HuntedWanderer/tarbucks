@@ -188,7 +188,7 @@ if (!empty($_SESSION['cart'])) {
     <div class="profile-header">
   
     <a href="profileMember.php">
-    <img src="view.php?f=<?= encode($user->photo) ?>" 
+    <img src="view.php?image=<?= encode($user->photo) ?>" 
          alt="Profile Photo" 
          class="photo-preview">
 </a>

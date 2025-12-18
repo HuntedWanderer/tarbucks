@@ -178,7 +178,7 @@ $_title = 'Member Listing';
                     <td><?= htmlspecialchars($member->fav_person) ?></td>
                     <td>
                         <?php if (!empty($member->photo)): ?>
-                            <img src="view.php?f=<?= htmlspecialchars($member->photo) ?>" 
+                            <img src="view.php?image=<?= htmlspecialchars($member->photo) ?>" 
                                  class="member-photo" 
                                  alt="Member Photo">
                         <?php else: ?>

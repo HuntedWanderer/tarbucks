@@ -125,7 +125,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php foreach ($products as $row): ?>
         <div class="product">
             
-            <img src="view.php?f=<?= htmlspecialchars($row['photo']) ?>" 
+            <img src="view.php?image=<?= htmlspecialchars($row['photo']) ?>" 
                  alt="<?= htmlspecialchars($row['name']) ?>">
             
             <h2><?= htmlspecialchars($row['name']) ?></h2>

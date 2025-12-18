@@ -185,7 +185,7 @@ if (is_post()) {
                 <label>Profile Photo</label>
                 <div class="photo-upload-area" onclick="document.getElementById('photo-input').click()">
                     <?php if ($user->photo): ?>
-                        <img src="view.php?f=<?= encode($user->photo) ?>" 
+                        <img src="view.php?image=<?= encode($user->photo) ?>" 
                              class="photo-preview"
                              id="preview-image">
                     <?php else: ?>

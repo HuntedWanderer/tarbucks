@@ -44,7 +44,7 @@ if (is_post()) {
                     ->execute([$user_id]);
 
                 temp('info', 'Login Successful');
-                $target = ($user->role === 'Admin') ? 'try.php' : '/member.php';
+                $target = ($user['role'] === 'Admin') ? 'try.php' : 'member.php';
                 login($user, $target);
                 exit;
             } else {
