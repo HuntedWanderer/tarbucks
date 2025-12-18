@@ -10,24 +10,23 @@ $cart_count = 0;    // Default to 0
 if (is_logged_in()) {
     // A. Fetch User Data (Required by heade.php)
     // We check both object and array style to be safe
-    $user_id = $_SESSION['user']->user_id ?? $_SESSION['user']['user_id'];
-    
+    $user_id = $_SESSION['user']['user_id'];
     $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
     $stmt->execute([$user_id]);
-    $user = $stmt->fetch(PDO::FETCH_OBJ); // Force Object Fetch
+    $user = $stmt->fetch();
+    $_SESSION['user'] = $user;
     
     // Update session to keep it fresh
     if ($user) {
         $_SESSION['user'] = $user;
     }
 
-    // B. Calculate Cart Count (Required by heade.php)
+    $cart_count = 0;
     if (!empty($_SESSION['cart'])) {
-        foreach ($_SESSION['cart'] as $item) {
-            // Handle if cart item is array or simple number
-            $cart_count += is_array($item) ? $item['qty'] : $item;
-        }
+    foreach ($_SESSION['cart'] as $qty) {
+        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
     }
+}
 
     // C. Set Member Navigation
     $header_file = 'heade.php';       
