@@ -1,5 +1,5 @@
 <?php
-require '_base.php'; // 1. Use Master Base File
+require_once '_base.php'; // 1. Use Master Base File
 
 // --- DELETE LOGIC ---
 if (is_post() && isset($_POST['delete'])) {
@@ -34,7 +34,7 @@ if (is_post() && isset($_POST['delete'])) {
 $stmt = $_db->query("SELECT id, member_user_id, address, payment_method, created_at 
                      FROM orders 
                      ORDER BY created_at DESC");
-$orders = $stmt->fetchAll();
+$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>

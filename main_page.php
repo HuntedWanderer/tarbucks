@@ -1,5 +1,5 @@
 <?php
-include '_base.php';
+include_once '_base.php';
 
 if (!is_logged_in()) {
     temp('info', 'Please login first');

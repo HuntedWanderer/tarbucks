@@ -16,6 +16,7 @@ if (is_logged_in()) {
     $user = $stmt->fetch();
     $_SESSION['user'] = $user;
     
+    $isAdmin = ($user && isset($user['role']) && $user['role'] == 'Admin');
     // Update session to keep it fresh
     if ($user) {
         $_SESSION['user'] = $user;
@@ -118,6 +119,20 @@ if (is_post()) {
         #cartButt:hover { background-color: #2e7031; }
         .alert.error { max-width: 800px; margin: 20px auto; background: #f44336; color: #fff; padding: 15px; border-radius: 8px; text-align: center; }
         .out-of-stock { margin-top: 20px; font-size: 1.2em; color: red; }
+        .admin-edit-btn {
+            display: inline-block;
+            background-color: #2196F3; /* Blue for info/edit */
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.6em; /* Smaller than the H1 */
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .admin-edit-btn:hover {
+            background-color: #0b7dda;
+        }
     </style>
 </head>
 <body>
@@ -150,6 +165,11 @@ if (is_post()) {
 
         <h1><?= htmlspecialchars($product['name']) ?></h1>
         
+        <?php if (isset($isAdmin) && $isAdmin): ?>
+                <a href="create.php?id=<?= $product['id'] ?>" class="admin-edit-btn">
+                     Edit Product
+                </a>
+            <?php endif; ?>
         <div class="stock-info">
             Available Stock: 
             <span class="stock-number"><?= max(0, $displayStock) ?></span>
