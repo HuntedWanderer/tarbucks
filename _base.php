@@ -242,7 +242,7 @@ function is_exists($value, $table, $field) {
 // ============================================================================
 
 function is_logged_in() {
-    return isset($_SESSION['user']);
+    return !empty($_SESSION['user']);
 }
 
 function auth(...$roles) {
