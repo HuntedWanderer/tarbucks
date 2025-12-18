@@ -1,7 +1,6 @@
 <?php
 
 include '_base.php';
-include 'heade.php';
 
 // Refresh User Session (Safe)
 $user_id = $_SESSION['user']['user_id'];
@@ -163,7 +162,7 @@ if (!empty($_SESSION['cart'])) {
     </style>
 </head>
 <body>
-
+<?php include 'heade.php'; ?>
 <h1>Your Shopping Cart 🛒</h1>
 <a href="member.php" id="link">← Continue Shopping</a><br><br><br>
 
