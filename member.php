@@ -13,7 +13,7 @@ if (!is_logged_in()) {
 }
 
 // 3. Refresh User Session (Safe)
-$user_id = $_SESSION['user']->user_id;
+$user_id = $_SESSION['user']['user_id'];
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
