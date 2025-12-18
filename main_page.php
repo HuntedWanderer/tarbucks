@@ -1,10 +1,10 @@
 <?php
 include '_base.php';
 
-if (!is_logged_in()) {
-    temp('info', 'Please login first');
-    redirect('head.php');
-}
+// if (!is_logged_in()) {
+//     temp('info', 'Please login first');
+//     redirect('head.php');
+// }
 
 $user_id = $_SESSION['user']->user_id;
 $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
