@@ -6,91 +6,91 @@ if (!is_logged_in()) {
     redirect('head.php');
 }
 
-$user_id = $_SESSION['user']['user_id'];
-$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-$_SESSION['user'] = $user;
+    $user_id = $_SESSION['user']['user_id'];
+    $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
+    $_SESSION['user'] = $user;
 
-if (is_post()) {
-    $email = post('email');
-    $user_id = post('user_id');
-    $fav = post('fav_person');
-    $f = get_file('photo');
+    if (is_post()) {
+        $email = post('email');
+        $user_id = post('user_id');
+        $fav = post('fav_person');
+        $f = get_file('photo');
 
-    $_err = [];
+        $_err = [];
 
-    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
-        $_err['user_id'] = 'User ID already exists';
+        if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
+            $_err['user_id'] = 'User ID already exists';
+        }
+        elseif (strlen($user_id) < 5) {
+            $_err['user_id'] = "Username must be at least 5 characters!";
+        }
+
+        if (!is_email($email)) {
+            $_err['email'] = 'Invalid email format';
+        }
+        if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
+            $_err['user_id'] = 'Email already exists';
+        }
+
+        $photo = $user['photo'];
+        if ($f) {
+            if (!str_starts_with($f->type, 'image/')) {
+                $_err['photo'] = 'Only image files are allowed';
+            } elseif ($f->size > 1 * 1024 * 1024) {
+                $_err['photo'] = 'Image size cannot exceed 1MB';
+            } else {
+                $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
+    $region = 'us-east-1';
+
+    // 1. Get the uploaded file path from your helper function object ($f)
+    // Note: I am assuming $f is an object or array returned by your get_file() function.
+    // If get_file() returns an object with tmp_name, use $f->tmp_name
+    // If get_file() returns $_FILES['photo'], use $f['tmp_name']
+
+    // Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
+    $file_tmp = $_FILES['photo']['tmp_name'];
+    $file_name = basename($_FILES['photo']['name']);
+    $s3_filename = time() . "_" . $file_name; // Unique name
+
+    // 2. Upload to S3
+    $cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
+    exec($cmd, $output, $return_var);
+
+    if ($return_var === 0) {
+        $photo = $s3_filename; // Success
+    } else {
+        $_SESSION['error'] = "Photo upload failed";
+        // Redirect or stop execution if strictly required
     }
-    elseif (strlen($user_id) < 5) {
-        $_err['user_id'] = "Username must be at least 5 characters!";
-    }
+            }
+        }
 
-    if (!is_email($email)) {
-        $_err['email'] = 'Invalid email format';
-    }
-    if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
-        $_err['user_id'] = 'Email already exists';
-    }
+        if (empty($_err)) {
+            try {
+                $stm = $_db->prepare("
+                    UPDATE member 
+                    SET user_id = ?, email = ?, fav_person = ?, photo = ?
+                    WHERE id = ?
+                ");
+                $params = [$user_id, $email, $fav, $photo, $user['id']];
+                $stm->execute($params);
 
-    $photo = $user['photo'];
-    if ($f) {
-        if (!str_starts_with($f->type, 'image/')) {
-            $_err['photo'] = 'Only image files are allowed';
-        } elseif ($f->size > 1 * 1024 * 1024) {
-            $_err['photo'] = 'Image size cannot exceed 1MB';
-        } else {
-            $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
-$region = 'us-east-1';
+                $user['user_id'] = $user_id;
+                $user['email'] = $email;
+                $user['fav_person'] = $fav;
+                $user['photo'] = $photo;
+                $_SESSION['user'] = $user;
 
-// 1. Get the uploaded file path from your helper function object ($f)
-// Note: I am assuming $f is an object or array returned by your get_file() function.
-// If get_file() returns an object with tmp_name, use $f->tmp_name
-// If get_file() returns $_FILES['photo'], use $f['tmp_name']
-
-// Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
-$file_tmp = $_FILES['photo']['tmp_name'];
-$file_name = basename($_FILES['photo']['name']);
-$s3_filename = time() . "_" . $file_name; // Unique name
-
-// 2. Upload to S3
-$cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
-exec($cmd, $output, $return_var);
-
-if ($return_var === 0) {
-    $photo = $s3_filename; // Success
-} else {
-    $_SESSION['error'] = "Photo upload failed";
-    // Redirect or stop execution if strictly required
-}
+                temp('info', 'Profile updated successfully');
+                redirect('profile.php'); 
+                
+            } catch (PDOException $e) {
+                temp('info', 'Error updating profile: ' . $e->getMessage());
+            }
         }
     }
-
-    if (empty($_err)) {
-        try {
-            $stm = $_db->prepare("
-                UPDATE member 
-                SET user_id = ?, email = ?, fav_person = ?, photo = ?
-                WHERE id = ?
-            ");
-            $params = [$user_id, $email, $fav, $photo, $user['id']];
-            $stm->execute($params);
-
-            $user['user_id'] = $user_id;
-            $user['email'] = $email;
-            $user['fav_person'] = $fav;
-            $user['photo'] = $photo;
-            $_SESSION['user'] = $user;
-
-            temp('info', 'Profile updated successfully');
-            redirect('profile.php'); 
-            
-        } catch (PDOException $e) {
-            temp('info', 'Error updating profile: ' . $e->getMessage());
-        }
-    }
-}
 
 ?>
 

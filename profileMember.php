@@ -6,110 +6,91 @@ if (!is_logged_in()) {
     redirect('head.php');
 }
 
-// Refresh User Session (Safe)
-$user_id = $_SESSION['user']['user_id'];
-$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-$_SESSION['user'] = $user;
+    $user_id = $_SESSION['user']['user_id'];
+    $stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
+    $_SESSION['user'] = $user;
 
-// --- GHOST CODE DELETED ---
-// I removed the 50+ lines of "Profile Update" logic. 
-// It does not belong on a Menu page!
+    if (is_post()) {
+        $email = post('email');
+        $user_id = post('user_id');
+        $fav = post('fav_person');
+        $f = get_file('photo');
 
-// Cart Count Logic
-$cart_count = 0;
-if (!empty($_SESSION['cart'])) {
-    foreach ($_SESSION['cart'] as $qty) {
-        $cart_count += is_array($qty) ? $qty['qty'] : $qty;
+        $_err = [];
+
+        if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
+            $_err['user_id'] = 'User ID already exists';
+        }
+        elseif (strlen($user_id) < 5) {
+            $_err['user_id'] = "Username must be at least 5 characters!";
+        }
+
+        if (!is_email($email)) {
+            $_err['email'] = 'Invalid email format';
+        }
+        if ($email != $user['email'] && !is_unique($email, 'member', 'email')) {
+            $_err['user_id'] = 'Email already exists';
+        }
+
+        $photo = $user['photo'];
+        if ($f) {
+            if (!str_starts_with($f->type, 'image/')) {
+                $_err['photo'] = 'Only image files are allowed';
+            } elseif ($f->size > 1 * 1024 * 1024) {
+                $_err['photo'] = 'Image size cannot exceed 1MB';
+            } else {
+                $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
+    $region = 'us-east-1';
+
+    // 1. Get the uploaded file path from your helper function object ($f)
+    // Note: I am assuming $f is an object or array returned by your get_file() function.
+    // If get_file() returns an object with tmp_name, use $f->tmp_name
+    // If get_file() returns $_FILES['photo'], use $f['tmp_name']
+
+    // Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
+    $file_tmp = $_FILES['photo']['tmp_name'];
+    $file_name = basename($_FILES['photo']['name']);
+    $s3_filename = time() . "_" . $file_name; // Unique name
+
+    // 2. Upload to S3
+    $cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
+    exec($cmd, $output, $return_var);
+
+    if ($return_var === 0) {
+        $photo = $s3_filename; // Success
+    } else {
+        $_SESSION['error'] = "Photo upload failed";
+        // Redirect or stop execution if strictly required
     }
-}
+            }
+        }
 
-$user_id = $_SESSION['user']['user_id'];
-$stmt = $_db->prepare("SELECT * FROM member WHERE user_id = ?");
-$stmt->execute([$user_id]);
-$user = $stmt->fetch();
-$_SESSION['user'] = $user;
+        if (empty($_err)) {
+            try {
+                $stm = $_db->prepare("
+                    UPDATE member 
+                    SET user_id = ?, email = ?, fav_person = ?, photo = ?
+                    WHERE id = ?
+                ");
+                $params = [$user_id, $email, $fav, $photo, $user['id']];
+                $stm->execute($params);
 
-if (is_post()) {
-    $email = post('email');
-    $user_id = post('user_id');
-    $fav = post('fav_person');
-    $f = get_file('photo');
+                $user['user_id'] = $user_id;
+                $user['email'] = $email;
+                $user['fav_person'] = $fav;
+                $user['photo'] = $photo;
+                $_SESSION['user'] = $user;
 
-    $_err = [];
-
-    if ($user_id != $user['user_id'] && !is_unique($user_id, 'member', 'user_id')) {
-        $_err['user_id'] = 'User ID already exists';
-    }
-    elseif (strlen($user_id) < 5) {
-        $_err['user_id'] = "Username must be at least 5 characters!";
-    }
-
-    if (!is_email($email)) {
-        $_err['email'] = 'Invalid email format';
-    }
-    if ($email != $user->email && !is_unique($email, 'member', 'email')) {
-        $_err['user_id'] = 'Email already exists';
-    }
-
-    $photo = $user['photo'];
-    if ($f) {
-        if (!str_starts_with($f->type, 'image/')) {
-            $_err['photo'] = 'Only image files are allowed';
-        } elseif ($f->size > 1 * 1024 * 1024) {
-            $_err['photo'] = 'Image size cannot exceed 1MB';
-        } else {
-            $bucket = 'tarbucks-bucket'; // <--- UPDATE THIS
-$region = 'us-east-1';
-
-// 1. Get the uploaded file path from your helper function object ($f)
-// Note: I am assuming $f is an object or array returned by your get_file() function.
-// If get_file() returns an object with tmp_name, use $f->tmp_name
-// If get_file() returns $_FILES['photo'], use $f['tmp_name']
-
-// Standard PHP $_FILES approach (safest bet to replace your helper for the upload part):
-$file_tmp = $_FILES['photo']['tmp_name'];
-$file_name = basename($_FILES['photo']['name']);
-$s3_filename = time() . "_" . $file_name; // Unique name
-
-// 2. Upload to S3
-$cmd = "aws s3 cp \"$file_tmp\" \"s3://$bucket/images/$s3_filename\" --region $region";
-exec($cmd, $output, $return_var);
-
-if ($return_var === 0) {
-    $photo = $s3_filename; // Success
-} else {
-    $_SESSION['error'] = "Photo upload failed";
-    // Redirect or stop execution if strictly required
-}
+                temp('info', 'Profile updated successfully');
+                redirect('profileMember.php'); 
+                
+            } catch (PDOException $e) {
+                temp('info', 'Error updating profile: ' . $e->getMessage());
+            }
         }
     }
-
-    if (empty($_err)) {
-        try {
-            $stm = $_db->prepare("
-                UPDATE member 
-                SET user_id = ?, email = ?, fav_person = ?, photo = ?
-                WHERE id = ?
-            ");
-            $params = [$user_id, $email, $fav, $photo, $user->id];
-            $stm->execute($params);
-
-            $user['user_id'] = $user_id;
-            $user['email'] = $email;
-            $user['fav_person'] = $fav;
-            $user['photo'] = $photo;
-            $_SESSION['user'] = $user;
-
-            temp('info', 'Profile updated successfully');
-            redirect('profileMember.php'); 
-            
-        } catch (PDOException $e) {
-            temp('info', 'Error updating profile: ' . $e->getMessage());
-        }
-    }
-}
 
 ?>
 
@@ -211,7 +192,7 @@ button.submit-btn{
             <div class="form-group">
                 <label>User ID</label>
                 <input type="text" name="user_id" 
-                       value="<?= encode($user->user_id) ?>" 
+                       value="<?= encode($user['user_id']) ?>" 
                        required>
                 <?php err('user_id'); ?>
             </div>
@@ -219,7 +200,7 @@ button.submit-btn{
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" name="email" 
-                       value="<?= encode($user->email) ?>" 
+                       value="<?= encode($user['email']) ?>" 
                        required>
                 <?php err('email'); ?>
             </div>
@@ -227,14 +208,14 @@ button.submit-btn{
             <div class="form-group">
                 <label>Favorite Person</label>
                 <input type="text" name="fav_person" 
-                       value="<?= encode($user->fav_person) ?>">
+                       value="<?= encode($user['fav_person']) ?>">
             </div>
 
             <div class="form-group">
                 <label>Profile Photo</label>
                 <div class="photo-upload-area" onclick="document.getElementById('photo-input').click()">
-                    <?php if ($user->photo): ?>
-                        <img src="view.php?image=<?= encode($user->photo) ?>" 
+                    <?php if ($user['photo']): ?>
+                        <img src="view.php?image=<?= encode($user['photo']) ?>" 
                              class="photo-preview"
                              id="preview-image">
                     <?php else: ?>
