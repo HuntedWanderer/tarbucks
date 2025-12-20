@@ -258,72 +258,103 @@ if (!empty($_SESSION['cart'])) {
 </head>
 <body>
 <?php include 'heade.php'; ?>
-<h1>Your Shopping Cart 🛒</h1>
-<a href="member.php" id="link">← Continue Shopping</a><br><br><br>
+<div class="container">
+    <h1>Your Shopping Cart 🛒</h1>
+    
+    <a href="mainpage_menu.php" class="continue-btn">← Continue Shopping</a>
 
-<?php if (empty($cart_items)): ?>
-    <p>Your cart is empty.</p>
-<?php else: ?>
-    <form method="post">
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Photo</th>
-                <th>Qty / Ice / Sugar</th>
-                <th>Price</th>
-                <th>Subtotal</th>
-                <th>Action</th>
-            </tr>
+    <?php if (empty($cart_items)): ?>
+        <div style="text-align: center; padding: 50px; background: white; border-radius: 10px;">
+            <p style="font-size: 18px; color: #777;">Your cart is currently empty.</p>
+            <a href="mainpage_menu.php" class="btn btn-checkout" style="margin-top: 10px;">Browse Menu</a>
+        </div>
+    <?php else: ?>
+        
+        <form method="post">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Photo</th>
+                            <th>Product Details</th>
+                            <th>Configuration</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($cart_items as $item): ?>
+                            <?php
+                            $item_data = $_SESSION['cart'][$item['id']];
+                            $qty = $item_data['qty'] ?? $item_data;
+                            $ice = $item_data['ice'] ?? 'regular';
+                            $sugar = $item_data['sugar'] ?? 'full';
+                            ?>
+                            <tr>
+                                <td>
+                                    <img src="view.php?image=<?= htmlspecialchars($item['photo']) ?>" alt="Product">
+                                </td>
 
-            <?php foreach ($cart_items as $item): ?>
-                <?php
-                $item_data = $_SESSION['cart'][$item['id']];
-                $qty = $item_data['qty'] ?? $item_data;
-                $ice = $item_data['ice'] ?? 'regular';
-                $sugar = $item_data['sugar'] ?? 'full';
-                ?>
-                <tr>
-                    <td><?= htmlspecialchars($item['name']) ?></td>
-                    <td><img src="view.php?image=<?php echo $item['photo']; ?>" width="80"></td>
-                    <td>
-                        <label>Quantity:</label>
-                        <input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $qty ?>" min="0"><br>
+                                <td>
+                                    <strong><?= htmlspecialchars($item['name']) ?></strong>
+                                </td>
 
-                        <label>Ice:</label>
-                        <select name="ice[<?= $item['id'] ?>]">
-                            <option value="regular" <?= $ice == 'regular' ? 'selected' : '' ?>>Regular</option>
-                            <option value="less" <?= $ice == 'less' ? 'selected' : '' ?>>Less</option>
-                            <option value="no" <?= $ice == 'no' ? 'selected' : '' ?>>No Ice</option>
-                        </select><br>
+                                <td>
+                                    <div class="option-group">
+                                        <label>Quantity</label>
+                                        <input type="number" name="quantities[<?= $item['id'] ?>]" value="<?= $qty ?>" min="0">
+                                    </div>
 
-                        <label>Sugar:</label>
-                        <select name="sugar[<?= $item['id'] ?>]">
-                            <option value="full" <?= $sugar == 'full' ? 'selected' : '' ?>>Full</option>
-                            <option value="half" <?= $sugar == 'half' ? 'selected' : '' ?>>Half</option>
-                            <option value="no" <?= $sugar == 'no' ? 'selected' : '' ?>>No Sugar</option>
-                        </select>
-                    </td>
-                    <td>RM <?= number_format($item['price'], 2) ?></td>
-                    <td>RM <?= number_format($item['subtotal'], 2) ?></td>
-                    <td>
-                        <a class ="remove-link" href="cart.php?remove=<?= $item['id'] ?>" onclick="return confirm('Remove item?')" id="link">🗑 Remove</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
+                                    <div class="option-group">
+                                        <label>Ice Level</label>
+                                        <select name="ice[<?= $item['id'] ?>]">
+                                            <option value="regular" <?= $ice == 'regular' ? 'selected' : '' ?>>Regular</option>
+                                            <option value="less" <?= $ice == 'less' ? 'selected' : '' ?>>Less Ice</option>
+                                            <option value="no" <?= $ice == 'no' ? 'selected' : '' ?>>No Ice</option>
+                                        </select>
+                                    </div>
 
-        <p class="cart-summary">Total: RM <?= number_format($total, 2) ?></p>
+                                    <div class="option-group">
+                                        <label>Sugar Level</label>
+                                        <select name="sugar[<?= $item['id'] ?>]">
+                                            <option value="full" <?= $sugar == 'full' ? 'selected' : '' ?>>Full Sugar</option>
+                                            <option value="half" <?= $sugar == 'half' ? 'selected' : '' ?>>Half Sugar</option>
+                                            <option value="no" <?= $sugar == 'no' ? 'selected' : '' ?>>No Sugar</option>
+                                        </select>
+                                    </div>
+                                </td>
 
-        <input type="submit" class="btn-update" name="update" value="Update Cart">
-    </form>
+                                <td class="price">RM <?= number_format($item['price'], 2) ?></td>
+                                
+                                <td class="subtotal">RM <?= number_format($item['subtotal'], 2) ?></td>
+                                
+                                <td>
+                                    <a href="cart.php?remove=<?= $item['id'] ?>" 
+                                       onclick="return confirm('Remove this item from cart?')" 
+                                       class="remove-link">
+                                       🗑 Remove
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-    <form action="checkout.php" method="get" style="margin-top: 20px;">
-        <button type="submit" class="btn-checkout">Proceed to Checkout</button>
-    </form>
-<?php endif; ?>
-<footer>
-    <?php
+            <div class="cart-footer">
+                <div class="total-display">
+                    Total: <span style="color: #388e3c;">RM <?= number_format($total, 2) ?></span>
+                </div>
+                
+                <div style="display: flex; gap: 10px; width: 100%; max-width: 400px;">
+                    <button type="submit" name="update" class="btn btn-update" style="flex: 1;">Update Cart</button>
+                    <a href="checkout.php" class="btn btn-checkout" style="flex: 1; text-align: center;">Checkout</a>
+                </div>
+            </div>
+        </form>
 
-?></footer>
+    <?php endif; ?>
+</div>
 </body>
 </html>
