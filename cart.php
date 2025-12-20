@@ -261,12 +261,12 @@ if (!empty($_SESSION['cart'])) {
 <div class="container">
     <h1>Your Shopping Cart 🛒</h1>
     
-    <a href="mainpage_menu.php" class="continue-btn">← Continue Shopping</a>
+    <a href="member.php" class="continue-btn">← Continue Shopping</a>
 
     <?php if (empty($cart_items)): ?>
         <div style="text-align: center; padding: 50px; background: white; border-radius: 10px;">
             <p style="font-size: 18px; color: #777;">Your cart is currently empty.</p>
-            <a href="mainpage_menu.php" class="btn btn-checkout" style="margin-top: 10px;">Browse Menu</a>
+            <a href="member.php" class="btn btn-checkout" style="margin-top: 10px;">Browse Menu</a>
         </div>
     <?php else: ?>
         
