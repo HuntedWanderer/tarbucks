@@ -306,7 +306,7 @@ if (!empty($_SESSION['cart'])) {
                     <td>RM <?= number_format($item['price'], 2) ?></td>
                     <td>RM <?= number_format($item['subtotal'], 2) ?></td>
                     <td>
-                        <a href="cart.php?remove=<?= $item['id'] ?>" onclick="return confirm('Remove item?')" id="link">🗑 Remove</a>
+                        <a class ="remove-link" href="cart.php?remove=<?= $item['id'] ?>" onclick="return confirm('Remove item?')" id="link">🗑 Remove</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -314,11 +314,11 @@ if (!empty($_SESSION['cart'])) {
 
         <p class="cart-summary">Total: RM <?= number_format($total, 2) ?></p>
 
-        <input type="submit" name="update" value="Update Cart">
+        <input type="submit" class="btn-update" name="update" value="Update Cart">
     </form>
 
     <form action="checkout.php" method="get" style="margin-top: 20px;">
-        <button type="submit">Proceed to Checkout</button>
+        <button type="submit" class="btn-checkout">Proceed to Checkout</button>
     </form>
 <?php endif; ?>
 <footer>

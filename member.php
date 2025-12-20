@@ -49,7 +49,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Tarbuck - Menu</title>
     <link rel="stylesheet" href="zz.css">
     <link rel="stylesheet" href="css/ss.css">
-    <link rel="stylesheet" href="/css/style.css">
 
     <style>
 .category-nav {
@@ -142,10 +141,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body>
 <?php include 'heade.php'; ?>
-
-<div id="info" style="text-align: center; color: red; margin: 10px;">
-        <?= temp('info') ?>
-    </div>
 
     <div class="search-container">
        <?php if(file_exists('basic_searching.php')) include 'basic_searching.php'; ?>
