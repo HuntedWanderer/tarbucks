@@ -58,7 +58,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             padding: 0 15px;
             text-align: center;
         }
-        
+
 .search-container input[type="text"] {
             width: 100%;
             padding: 10px;
@@ -148,8 +148,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="category-nav">
    <?php
-   // Keep searching logic if valid
-   if(file_exists('basic_searching.php')) include 'basic_searching.php';
    
    $categories = ['All', 'Latte', 'Americano', 'Mocha', 'Cappuccino', 'Caramel', 'Chocolate', 'Coffee', 'Espresso', 'Tea', 'Other'];
     foreach ($categories as $cat) {

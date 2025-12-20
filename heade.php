@@ -1,339 +1,174 @@
 <style>
-    
-    /* =========================================
-
-       1. GLOBAL & RESET
-
-       ========================================= */
-
-    * {
-
-        box-sizing: border-box; /* Fixes padding issues */
-
+ * {
+        box-sizing: border-box;
         margin: 0;
-
         padding: 0;
-
     }
-
-
 
     body {
-
-        font-family: 'Segoe UI', sans-serif;
-
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #f5f5f5;
-
-        overflow-x: hidden; /* Prevents side-scrolling on mobile */
-
     }
 
-
-
     /* =========================================
-
-       2. HEADER CONTAINER
-
+       2. HEADER CONTAINER (Green Theme)
        ========================================= */
-
     .header {
-
         display: flex;
-
         align-items: center;
-
         justify-content: space-between;
-
-        padding: 10px 30px;
-
-        background-color: #fff;
-
-        border-bottom: 1px solid #ddd;
-
-        /* FLEX WRAP: Crucial! Allows content to create a 2nd row on mobile */
-
-        flex-wrap: wrap; 
-
+        /* TARGET STYLE: Light Green Background */
+        background-color: lightgreen; 
+        padding: 10px 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         position: relative;
-
         z-index: 100;
-
+        height: 80px; /* Fixed height for consistency */
     }
 
-
-
     /* =========================================
-
-       3. LOGO
-
+       3. LOGO (Circular)
        ========================================= */
-
     .logo {
-
+        width: 60px;
         height: 60px;
-
-        width: auto;
-
-        /* Ensures logo is always visible */
-
-        flex-shrink: 0; 
-
+        border-radius: 50%; /* Circular */
+        object-fit: cover;
+        flex-shrink: 0;
+        margin-right: 15px;
+        border: 2px solid white; /* Adds a nice pop on green */
     }
-
-
 
     /* =========================================
-
-       4. MIDDLE NAVIGATION (Title + Links)
-
+       4. NAVIGATION (Title + Links)
        ========================================= */
-
     .main-head-content {
-
         display: flex;
-
         align-items: center;
-
-        gap: 25px;
-
         flex-grow: 1;
-
-        justify-content: center;
-
+        gap: 20px;
+        overflow: hidden; /* Prevents overflow issues */
     }
 
-
-
-    .main-head-content a {
-
-        text-decoration: none;
-
-        color: #333;
-
+    /* Title */
+    .main-head-content h1 {
+        font-size: 22px;
+        margin: 0;
+        color: #004d00; /* Dark Green Text */
+        white-space: nowrap;
         font-weight: bold;
-
-        font-size: 15px;
-
-        white-space: nowrap; /* Prevents text from breaking */
-
-        transition: color 0.3s;
-
-        /* Padding makes links easier to tap */
-
-        padding: 5px; 
-
+        text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
     }
 
-
+    /* Links */
+    .main-head-content a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+        font-size: 15px;
+        transition: color 0.3s;
+        white-space: nowrap;
+        padding: 5px;
+    }
 
     .main-head-content a:hover {
-
-        color: #028a31;
-
+        color: white; /* Turn white on hover like target */
     }
-
-
-
-    /* Specific style for the Title inside the nav */
-
-    .main-head-content h1 {
-
-        margin: 0;
-
-        font-size: 22px;
-
-        color: #028a31; /* Make the brand name green */
-
-    }
-
-
 
     /* =========================================
-
        5. RIGHT SIDE (Cart + Profile)
-
        ========================================= */
-
     .header-right {
-
         display: flex;
-
         align-items: center;
-
-        gap: 15px;
-
-        flex-shrink: 0; /* Prevents this section from collapsing */
-
+        gap: 10px;
+        margin-left: 10px;
+        flex-shrink: 0;
     }
 
-
-
+    /* Cart Button (Styled to match your theme) */
     #viewcart-btn {
-
-        background-color: #028a31;
-
+        background-color: #2e7d32; /* Dark Green Button */
         color: white;
-
         padding: 8px 15px;
-
         border-radius: 20px;
-
         text-decoration: none;
-
         font-weight: bold;
-
-        font-size: 14px;
-
+        font-size: 13px;
         white-space: nowrap;
-
-        transition: background-color 0.3s;
-
-        display: flex;
-
-        align-items: center;
-
-        gap: 5px;
-
+        border: 1px solid #1b5e20;
+        transition: all 0.3s ease;
     }
-
-
 
     #viewcart-btn:hover {
-
-        background-color: #026b26;
-
+        background-color: #1b5e20;
+        transform: translateY(-2px);
     }
 
-
-
+    /* Profile Picture */
     .photo-preview-small {
-
         width: 45px;
-
         height: 45px;
-
-        object-fit: cover;
-
         border-radius: 50%;
-
-        border: 2px solid #028a31;
-
-        transition: transform 0.2s;
-
+        object-fit: cover;
+        border: 2px solid white;
     }
-
-    
-
-    .photo-preview-small:active {
-
-        transform: scale(0.95); /* Click effect */
-
-    }
-
-
 
     /* =========================================
-
-       6. MOBILE RESPONSIVENESS (The Magic Part)
-
+       6. MOBILE RESPONSIVENESS (The Fix)
        ========================================= */
-
-    @media (max-width: 850px) {
-
+    @media (max-width: 768px) {
+        
         .header {
-
-            padding: 10px 15px;
-
-            gap: 10px; /* Space between the rows */
-
+            padding: 8px 10px; /* Compact padding */
+            height: auto;
         }
 
-
-
-        /* ROW 1: Logo (Left) and Header Right (Right) */
-
-        .logo {
-
-            height: 45px; /* Smaller logo */
-
-            order: 1;     /* Force to be first */
-
-        }
-
-        
-
-        .header-right {
-
-            order: 2;     /* Force to be second (same line as logo) */
-
-            margin-left: auto; /* Pushes it to the far right */
-
-        }
-
-
-
-        /* ROW 2: Navigation (Drops down) */
-
-        .main-head-content {
-
-            order: 3;     /* Force to be third (new line) */
-
-            width: 100%;  /* Take full width */
-
-            
-
-            /* SCROLLABLE NAV: Swipe left/right to see all links */
-
-            overflow-x: auto; 
-
-            justify-content: flex-start; /* Align start so scrolling works */
-
-            padding-bottom: 5px; /* Space for scrollbar */
-
-            border-top: 1px solid #f0f0f0; /* faint line to separate */
-
-            padding-top: 10px;
-
-        }
-
-
-
-        /* Hide scrollbar for cleaner look */
-
-        .main-head-content::-webkit-scrollbar {
-
-            display: none; 
-
-        }
-
-
-
-        /* Adjust Title size on mobile */
-
+        /* 1. HIDE THE TITLE (To save space) */
         .main-head-content h1 {
-
-            font-size: 18px;
-
-            margin-right: 10px;
-
+            display: none;
         }
 
-        
-
-        /* Make links look like buttons or pills on mobile */
-
-        .main-head-content a:not(:first-child) {
-
-            background-color: #f0f0f0;
-
-            padding: 5px 12px;
-
-            border-radius: 15px;
-
-            font-size: 13px;
-
+        /* 2. MAKE NAV SCROLLABLE & COMPACT */
+        .main-head-content {
+            gap: 5px; /* Tight gap */
+            overflow-x: auto; /* Scroll horizontally */
+            padding-bottom: 0;
+            
+            /* Hide scrollbars */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .main-head-content::-webkit-scrollbar { 
+            display: none; 
         }
 
+        /* 3. STYLE LINKS AS "PILLS" (Like the target) */
+        .main-head-content a {
+            font-size: 12px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.4); /* Semi-transparent pill */
+            border-radius: 12px;
+            color: #004d00;
+        }
+
+        /* 4. RESIZE ELEMENTS FOR MOBILE */
+        .logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 8px;
+        }
+
+        /* Cart Button - Mobile Icon Only or Compact Text */
+        #viewcart-btn {
+            padding: 6px 10px;
+            font-size: 11px;
+        }
+
+        .photo-preview-small {
+            width: 35px;
+            height: 35px;
+        }
     }
 </style>
 
