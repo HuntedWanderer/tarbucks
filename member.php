@@ -52,21 +52,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="/css/style.css">
 
     <style>
-.search-container {
-            max-width: 600px;
-            margin: 20px auto 10px auto; /* Centered, with spacing below */
-            padding: 0 15px;
-            text-align: center;
-        }
-
-.search-container input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-        }
-
- .category-nav {
+.category-nav {
     margin: 20px 0;
     
     
@@ -102,7 +88,8 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     color: white;
 }
 
-    .product-list {
+
+.product-list {
     display: grid;
     
     grid-template-columns: repeat(auto-fit, minmax(220px, 300px));
@@ -132,6 +119,24 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     border-radius: 6px;
     margin-bottom: 15px;
 }
+
+        /* ============================
+           2. MENU SPECIFIC STYLES (SEARCH BAR)
+           ============================ */
+        .search-container {
+            max-width: 600px;
+            margin: 20px auto 10px auto; 
+            padding: 0 15px;
+            text-align: center;
+        }
+
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
     </style>
 </head>
 
