@@ -48,58 +48,73 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/ss.css">
     <link rel="stylesheet" href="zz.css">
     <style>
-        .cart-link {
-            font-size: 20px;
-            position: absolute;
-            right: 120px;    
-            top: 25px;
-            text-decoration: none;
-            color: white;
-        }
+.category-nav {
+    margin: 20px 0;
+    
+    
+    display: flex;
+    overflow-x: auto; 
+    white-space: nowrap;
+    padding: 10px 15px;
+    gap: 10px;
+    
+    
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+}
 
-        .category-nav {
-            text-align: center;
-            margin: 20px 0;
-        }
+.category-nav::-webkit-scrollbar {
+    display: none;
+}
 
-        .category-nav a {
-            text-decoration: none;
-            margin: 0 10px;
-            color: #388e3c;
-            font-weight: bold;
-            border: 2px solid #388e3c;
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
+.category-nav a {
+    text-decoration: none;
+    color: #388e3c;
+    font-weight: bold;
+    border: 2px solid #388e3c;
+    padding: 8px 20px;
+    border-radius: 50px; 
+    transition: all 0.3s ease;
+    flex-shrink: 0; 
+}
 
-        .category-nav a:hover,
-        .category-nav a.active {
-            background-color: #388e3c;
-            color: white;
-        }
+.category-nav a:hover,
+.category-nav a.active {
+    background-color: #388e3c;
+    color: white;
+}
 
-        .product-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
 
-        .product {
-            border: 1px solid #ccc;
-            padding: 15px;
-            width: 220px;
-            text-align: center;
-            border-radius: 8px;
-            margin: 10px; /* Added spacing */
-        }
+.product-list {
+    display: grid;
+    
+    grid-template-columns: repeat(auto-fit, minmax(220px, 300px));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center; 
+}
 
-        .product img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
+.product {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
     </style>
 </head>
 <body>

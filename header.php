@@ -4,69 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARBUCK</title>
-    <link rel="icon" href="/images/logo.webp">
+    <link rel="icon" href="logo.webp">
   
     <link rel="stylesheet" href="/css/ss.css">
     <style>
-    .main-head-content {
-    gap: 30px;
+
+
+
+.header {
     display: flex;
     align-items: center;
+    justify-content: space-between; 
+    background-color: lightgreen;
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 100;
 }
-        .logo {
-            width: 100px;
-            height: 100px;
-            margin-right: 10px;
-            border-radius: 50px;
-            display: flex;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: lightgreen;
-            padding: 5px 20px;
-            position: relative;
-        }
-        .main-nav {
-            font-family: "Roboto", sans-serif;
-            display: block;
-            text-decoration: none;
-            color: black;
-            gap: 50px;
-            text-align: right;
-        }
-        #title {
-            font-size: 30px;
-            font-weight: bold;
-            text-shadow: 2px 2px 2px violet;
-        }
+
+
+.logo {
+    width: 60px;        
+    height: 60px;
+    border-radius: 50%; 
+    object-fit: cover;
+    flex-shrink: 0;    
+    margin-right: 15px; 
+}
+
+
+.main-head-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; 
+    gap: 20px;    
+}
+
+#title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    margin: 0;
+    line-height: 1;
+    white-space: nowrap; 
+}
+
+
+.main-nav {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+    font-family: "Roboto", sans-serif;
+    transition: color 0.3s;
+}
+
+.main-nav:hover {
+    color: white;
+}
+
+
+.login-btnN {
+    background-color: #2ecc71;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    white-space: nowrap;
+    border: 2px solid #27ae60;
+    transition: all 0.3s ease;
+    margin-left: 10px; 
+}
+
+.login-btnN:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+
+@media (max-width: 768px) {
     
-        .login-btnN {
-            background-color: #2ecc71;
-            color: white;
-            padding: 10px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            border: 2px solid #27ae60;
-            margin-left: auto;
-        }
 
-        .login-btnN:hover {
-            background-color: #27ae60;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }
+    .main-nav {
+        display: none; 
+    }
 
-        .login-btnN:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
+    
+    #title {
+        font-size: 18px; 
+    }
+    
+    
+    .logo {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+    }
 
-       
+    
+    .login-btnN {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
      
     </style>
 </head>

@@ -108,39 +108,183 @@ if (is_post()) {
     <link rel="stylesheet" href="css/ss.css">
     <link rel="stylesheet" href="/css/style.css"> 
     <style>
-        /* Styles kept identical to previous version */
-        body { background: #f5f5f5; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        .stock-info { color: #666; margin: 10px 0; font-size: 1.1em; }
-        .stock-number { font-weight: bold; color: <?= $displayStock > 0 ? 'green' : 'red' ?>; }
-        .linkButton { margin: 20px; }
-        #link { display: inline-block; background-color: #388e3c; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; transition: background-color 0.3s ease; }
-        #link:hover { background-color: #2e7031; }
-        .product-detail { max-width: 800px; margin: 40px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center; }
-        .product-image { width: 300px; max-width: 100%; border-radius: 12px; margin-bottom: 20px; }
-        .price { font-size: 1.6em; color: #388e3c; margin: 10px 0 20px; }
-        .description { font-size: 1em; color: #555; line-height: 1.6; margin-bottom: 30px; text-align: left; }
-        .order-form { margin-top: 20px; text-align: left; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #444; }
-        input[type="number"], select { width: 100%; padding: 10px; font-size: 1em; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        #cartButt { width: 100%; padding: 12px; background-color: #388e3c; color: #fff; font-size: 1.1em; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; }
-        #cartButt:hover { background-color: #2e7031; }
-        .alert.error { max-width: 800px; margin: 20px auto; background: #f44336; color: #fff; padding: 15px; border-radius: 8px; text-align: center; }
-        .out-of-stock { margin-top: 20px; font-size: 1.2em; color: red; }
-        .admin-edit-btn {
-            display: inline-block;
-            background-color: #2196F3; /* Blue for info/edit */
-            color: white;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.6em; /* Smaller than the H1 */
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-        .admin-edit-btn:hover {
-            background-color: #0b7dda;
-        }
+      
+* {
+    box-sizing: border-box; 
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    background: #f5f5f5; 
+    font-family: 'Segoe UI', sans-serif; 
+    overflow-x: hidden; 
+}
+
+
+.product-detail { 
+   
+    width: 90%; 
+    max-width: 800px; 
+    margin: 30px auto; 
+    padding: 20px;
+    background: #fff; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
+}
+
+
+.product-image { 
+   
+    width: 100%; 
+    max-width: 300px; 
+    height: auto;     
+    border-radius: 12px; 
+    margin-bottom: 20px; 
+    object-fit: cover;
+}
+
+
+.price { 
+    font-size: 1.6em; 
+    color: #388e3c; 
+    margin: 10px 0 20px; 
+    font-weight: bold;
+}
+
+.stock-info { 
+    color: #666; 
+    margin: 10px 0; 
+    font-size: 1.1em; 
+}
+
+
+.stock-number { 
+    font-weight: bold; 
+    color: <?= $displayStock > 0 ? 'green' : 'red' ?>; 
+}
+
+.description { 
+    font-size: 1em; 
+    color: #555; 
+    line-height: 1.6; 
+    margin-bottom: 30px; 
+    text-align: left; 
+    word-wrap: break-word; 
+}
+
+
+.linkButton { 
+    margin: 20px; 
+    text-align: center;
+}
+
+#link { 
+    display: inline-block; 
+    background-color: #388e3c; 
+    color: #fff; 
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border-radius: 8px; 
+    font-weight: bold; 
+    transition: background-color 0.3s ease; 
+}
+
+#link:hover { 
+    background-color: #2e7031; 
+}
+
+.admin-edit-btn {
+    display: inline-block;
+    background-color: #2196F3;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.8em; 
+    vertical-align: middle;
+    margin-top: 10px; 
+}
+
+.admin-edit-btn:hover {
+    background-color: #0b7dda;
+}
+
+
+.order-form { 
+    margin-top: 20px; 
+    text-align: left; 
+}
+
+.form-group { 
+    margin-bottom: 20px; 
+}
+
+label { 
+    display: block; 
+    font-weight: bold; 
+    margin-bottom: 8px; 
+    color: #444; 
+}
+
+
+input[type="number"], select { 
+    width: 100%;  
+    padding: 12px; 
+    font-size: 16px;
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+}
+
+#cartButt { 
+    width: 100%; 
+    padding: 15px; 
+    background-color: #388e3c; 
+    color: #fff; 
+    font-size: 1.1em; 
+    font-weight: bold; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    margin-top: 10px;
+}
+
+#cartButt:hover { 
+    background-color: #2e7031; 
+}
+
+
+.alert.error { 
+    width: 90%; 
+    max-width: 800px; 
+    margin: 20px auto; 
+    background: #f44336; 
+    color: #fff; 
+    padding: 15px; 
+    border-radius: 8px; 
+    text-align: center; 
+}
+
+.out-of-stock { 
+    margin-top: 20px; 
+    font-size: 1.2em; 
+    color: red; 
+}
+
+
+@media (min-width: 768px) {
+    .product-detail {
+        padding: 40px; 
+        margin: 40px auto;
+    }
+    
+    .admin-edit-btn {
+        margin-left: 10px;
+        margin-top: 0;
+    }
+}
     </style>
 </head>
 <body>
