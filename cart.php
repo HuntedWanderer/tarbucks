@@ -86,81 +86,173 @@ if (!empty($_SESSION['cart'])) {
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background-color: #f4f4f4;
-            margin:0px 10px 20px 10px;
-            
+            background-color: #f4f6f8;
+            margin: 0;
+            padding-bottom: 60px;
         }
 
-   
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation Link */
+        .continue-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #388e3c;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .continue-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Table Styling */
+        .table-wrapper {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow-x: auto; /* Enables scroll on mobile */
+            margin-bottom: 20px;
+        }
 
         table {
-            width: 98%;
+            width: 100%;
             border-collapse: collapse;
-            background-color: #fff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-            border-radius: 8px;
-            overflow: hidden;
+            min-width: 700px; /* Forces layout to stay wide enough */
         }
 
         th {
             background-color: #388e3c;
             color: white;
-            padding: 12px;
-            text-align:center;
+            padding: 15px;
+            text-align: left;
         }
 
         td {
-            padding: 12px;
-            vertical-align: middle;
-            text-align: center;
+            padding: 15px;
+            vertical-align: top;
+            border-bottom: 1px solid #eee;
+            color: #555;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        /* Product Image */
+        td img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
         }
 
-        img {
-            border-radius: 6px;
+        /* Form Inputs */
+        .option-group {
+            margin-bottom: 8px;
+        }
+        
+        .option-group label {
+            font-size: 12px;
+            color: #888;
+            display: block;
+            margin-bottom: 2px;
         }
 
-        input[type="number"],
-        select {
-            padding: 6px;
+        input[type="number"], select {
+            padding: 6px 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            margin-bottom: 5px;
-            width: 100%;
+            width: 100px;
+            font-size: 14px;
         }
 
-        #link {
-            color: #388e3c;
-            text-decoration: none;
+        /* Prices */
+        .price {
             font-weight: bold;
+            color: #333;
+        }
+        .subtotal {
+            font-weight: bold;
+            color: #388e3c;
+            font-size: 16px;
         }
 
-        #link:hover {
+        /* Actions */
+        .remove-link {
+            color: #d32f2f;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .remove-link:hover {
             text-decoration: underline;
         }
 
-        button, input[type="submit"] {
-            background-color: #388e3c;
-            color: white;
+        /* Summary & Buttons */
+        .cart-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .total-display {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            padding: 12px 24px;
             border: none;
-            padding: 10px 20px;
-            font-size: 15px;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 10px;
-        }
-
-        button:hover, input[type="submit"]:hover {
-            background-color: #2e7030;
-        }
-
-        .cart-summary {
-            margin-top: 20px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-update {
+            background-color: #757575;
+            color: white;
+        }
+        .btn-update:hover {
+            background-color: #616161;
+        }
+
+        .btn-checkout {
+            background-color: #388e3c;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-checkout:hover {
+            background-color: #2e7d32;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .cart-footer {
+                flex-direction: column;
+                text-align: center;
+            }
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>

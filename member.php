@@ -52,62 +52,99 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="/css/style.css">
 
     <style>
-        /* Kept your custom styles that don't conflict */
-        .headerMember {
-            background-color: lightgreen;
-            display: flex;
-            align-items: center;
+.search-container {
+            max-width: 600px;
+            margin: 20px auto 10px auto; /* Centered, with spacing below */
+            padding: 0 15px;
+            text-align: center;
+        }
+        
+.search-container input[type="text"] {
+            width: 100%;
             padding: 10px;
-            border-bottom: 1px solid #ccc;
-            position: relative;
-            z-index: 1;
-        }
-        .category-nav {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .category-nav a {
-            text-decoration: none;
-            margin: 0 10px;
-            color: #388e3c;
-            font-weight: bold;
-            border: 2px solid #388e3c;
-            padding: 5px 10px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-        .category-nav a:hover,
-        .category-nav a.active {
-            background-color: #388e3c;
-            color: white;
-        }
-        .product-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .product {
+            border-radius: 20px;
             border: 1px solid #ccc;
-            margin: 10px;
-            text-align: center;
-            border-radius: 8px;
-            background: white;
-            padding: 15px;
-            width:200px;
-            height:min-content;
         }
-        .product img {
-            width: 200px;
-            height: 180px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
+
+ .category-nav {
+    margin: 20px 0;
+    
+    
+    display: flex;
+    overflow-x: auto; 
+    white-space: nowrap;
+    padding: 10px 15px;
+    gap: 10px;
+    
+    
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+}
+
+.category-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.category-nav a {
+    text-decoration: none;
+    color: #388e3c;
+    font-weight: bold;
+    border: 2px solid #388e3c;
+    padding: 8px 20px;
+    border-radius: 50px; 
+    transition: all 0.3s ease;
+    flex-shrink: 0; 
+}
+
+.category-nav a:hover,
+.category-nav a.active {
+    background-color: #388e3c;
+    color: white;
+}
+
+    .product-list {
+    display: grid;
+    
+    grid-template-columns: repeat(auto-fit, minmax(220px, 300px));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    justify-content: center; 
+}
+
+.product {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    background: white;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
     </style>
 </head>
 
 <body>
 <?php include 'heade.php'; ?>
-<div id="info"><?= temp('info') ?></div>
+
+<div id="info" style="text-align: center; color: red; margin: 10px;">
+        <?= temp('info') ?>
+    </div>
+
+    <div class="search-container">
+       <?php if(file_exists('basic_searching.php')) include 'basic_searching.php'; ?>
+    </div>
 
 <div class="category-nav">
    <?php

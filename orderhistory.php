@@ -57,87 +57,111 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Order History - Tarbuck</title>
     <link rel="stylesheet" href="css/ss.css">
     <style>
-    body {
-        font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f0f4f3;
-      
-    }
-    
-  
-    .cart-button {
-        margin-left: auto;
-        background-color: lightgreen;
-        color: #388e3c;
-        padding: 16px 28px;
-        border-radius: 15px;
-        font-size: 36px;
-        font-weight: bold;
-        text-decoration: none;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-    .cart-button:hover {
-        background-color: #2e7d32;
-        transform: translateY(-2px);
-    }
+   body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding-bottom: 50px;
+        }
 
+        h1 {
+            text-align: center;
+            color: #333;
+            margin: 30px 0 20px 0;
+            font-size: 28px;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        overflow-x: auto;
-    }
-    th, td {
-        padding: 16px 20px;
-        text-align: center;
-        font-size: 15px;
-        border-bottom: 1px solid #e0e0e0;
-        transition: background-color 0.3s ease;
-    }
-    th {
-        background-color: #388e3c;
-        color: #ffffff;
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-    }
-    tbody tr:hover {
-        background-color: #e8f5e9;
-    }
-    .amount-column {
-        color: #2e7d32;
-        font-weight: bold;
-        font-size: 16px;
-    }
-    .btn {
-        background-color: #388e3c;
-        color: white;
-        padding: 8px 16px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: background-color 0.3s, transform 0.2s;
-        display: inline-block;
-        margin: 2px;
-    }
-    .btn:hover {
-        background-color: #2e7d32;
-        transform: translateY(-2px);
-    }
-    .delete-btn {
-        background-color: #e53935;
-    }
-    .delete-btn:hover {
-        background-color: #c62828;
-    }
-    .no-orders {
-        text-align: center;
-        padding: 60px 20px;
-        color: #888;
-        font-size: 20px;
-        font-weight: 500;
-    }
+        /* Container for the table */
+        .history-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            overflow-x: auto; /* Allows table to scroll on mobile */
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden; /* Rounds the corners of the table */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            min-width: 600px; /* Forces scroll if screen is too small */
+        }
+
+        th, td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #388e3c; /* Tarbuck Green */
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #f9fff9; /* Very light green on hover */
+        }
+
+        /* Specific Column Styles */
+        .amount-column {
+            color: #2e7d32;
+            font-weight: bold;
+            font-family: monospace; /* Aligns numbers nicely */
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
+        .btn {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+            margin-right: 5px;
+        }
+
+        .btn-view {
+            background-color: #388e3c;
+            color: white;
+            border: 1px solid #388e3c;
+        }
+        .btn-view:hover {
+            background-color: #2e7d32;
+        }
+
+        .btn-delete {
+            background-color: white;
+            color: #d32f2f;
+            border: 1px solid #ef9a9a;
+        }
+        .btn-delete:hover {
+            background-color: #ffebee;
+            border-color: #d32f2f;
+        }
+
+        /* Empty State */
+        .no-orders {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            color: #777;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
